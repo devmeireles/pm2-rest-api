@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import articleRoute from './modules/article/article.route';
+import authorRoute from './modules/author/author.route';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ class App {
 
   private routes(): void {
     this.express.use(`/article`, articleRoute);
+    this.express.use(`/author`, authorRoute);
   }
 }
 
