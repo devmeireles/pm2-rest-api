@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import IQueryFilters from '../../interfaces/query-filters.interface';
 import articleService from './article.service';
 import { ArticleValidator } from './article.validator';
 import { CreateArticleDTO } from './dto/create-article.dto';
@@ -8,6 +9,23 @@ class ArticleController {
   public async index(req: Request, res: Response): Promise<Response> {
     try {
       const articles = await articleService.getAllArticles();
+      return res.status(200).json({
+        success: true,
+        data: articles,
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error instanceof Error ? error.message : error,
+      });
+    }
+  }
+
+  public async search(req: Request, res: Response): Promise<Response> {
+    try {
+      const filters = req.query as unknown as IQueryFilters;
+
+      const articles = await articleService.getFilteredArticles(filters);
       return res.status(200).json({
         success: true,
         data: articles,
@@ -82,7 +100,6 @@ class ArticleController {
 
   public async update(req: Request, res: Response): Promise<Response> {
     try {
-
       const { id } = req.params;
       const { title, intro } = req.body as UpdateArticleDTO;
 

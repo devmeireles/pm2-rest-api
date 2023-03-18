@@ -1,5 +1,4 @@
 export interface UpdateArticleDTO {
-    intro: string;
-    title: string;
-  }
-  
+  intro: string;
+  title: string;
+}
