@@ -1,5 +1,6 @@
-// import axios from "axios";
 import http from 'node:https';
+import fs from 'fs';
+import path from 'path';
 
 class DataService {
   public async readFromExternal(): Promise<string> {
@@ -16,6 +17,12 @@ class DataService {
 
       request.end();
     });
+  }
+
+  public async fetchFromExternal(): Promise<void> {
+    const data = await this.readFromExternal();
+
+    fs.writeFileSync(path.join(__dirname, `../../data/database.json`), data);
   }
 }
 

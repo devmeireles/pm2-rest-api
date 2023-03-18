@@ -16,6 +16,20 @@ class DataController {
       });
     }
   }
+
+  public async fetchData(req: Request, res: Response): Promise<Response> {
+    try {
+      await dataService.fetchFromExternal();
+      return res.status(201).json({
+        success: true,
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error instanceof Error ? error.message : error,
+      });
+    }
+  }
 }
 
 export default new DataController();
