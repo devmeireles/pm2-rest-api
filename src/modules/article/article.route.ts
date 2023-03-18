@@ -6,6 +6,6 @@ const articleRoute = Router();
 articleRoute.get(`/`, articleController.index);
 articleRoute.get(`/:id`, articleController.show);
 articleRoute.post(`/`, articleController.create);
-articleRoute.put(`/`, articleController.update);
+articleRoute.put(`/:id`, articleController.update);
 
 export default articleRoute;
