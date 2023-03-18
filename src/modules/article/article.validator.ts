@@ -1,6 +1,6 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNumber, IsString } from 'class-validator';
 import { BaseValidator } from '../../helpers/base-validator.helper';
-import { IArticle } from './interface/article.interface';
+import { IArticle } from '../../interfaces/article.interface';
 
 export class ArticleValidator extends BaseValidator implements Omit<IArticle, 'id'> {
   @IsString()
@@ -14,6 +14,9 @@ export class ArticleValidator extends BaseValidator implements Omit<IArticle, 'i
 
   @IsNumber()
   author_id: number;
+
+  @IsDateString()
+  created_at: string;
 
   constructor(arg: Record<string, any>) {
     super();
