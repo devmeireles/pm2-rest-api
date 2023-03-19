@@ -5,16 +5,16 @@ class AuthorController {
   public async show(req: Request, res: Response): Promise<Response> {
     try {
       const { id } = req.params;
-      const article = await authorService.getArticlesByAuthorId(+id);
+      const author = await authorService.getArticlesByAuthorId(+id);
 
-      if (!article) {
+      if (author.length === 0) {
         res.status(404);
         throw new Error(`Author not found`);
       }
 
       return res.status(200).json({
         success: true,
-        data: article,
+        data: author,
       });
     } catch (error) {
       return res.json({

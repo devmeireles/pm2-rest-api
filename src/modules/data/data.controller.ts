@@ -20,7 +20,7 @@ class DataController {
   public async fetchData(req: Request, res: Response): Promise<Response> {
     try {
       await dataService.fetchFromExternal();
-      return res.status(201).json({
+      return res.status(200).json({
         success: true,
       });
     } catch (error) {
