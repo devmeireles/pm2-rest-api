@@ -1,8 +1,8 @@
 import { IsDateString, IsNumber, IsString } from 'class-validator';
-import { BaseValidator } from '../../helpers/base-validator.helper';
-import { IArticle } from '../../interfaces/article.interface';
+import { BaseValidator } from '../../../helpers/base-validator.helper';
+import { CreateArticleDTO } from '../dto/create-article.dto';
 
-export class ArticleValidator extends BaseValidator implements Omit<IArticle, 'id'> {
+export class NewArticleValidator extends BaseValidator implements CreateArticleDTO {
   @IsString()
   title: string;
 
