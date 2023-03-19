@@ -1,26 +1,30 @@
-import fs from 'fs';
-import path from 'path';
-import data from '../../data/database.json';
+import fileHandler from '../../helpers/file-handler.helper';
 import { IArticle } from '../../interfaces/article.interface';
 import IQueryFilters from '../../interfaces/query-filters.interface';
 import { CreateArticleDTO } from './dto/create-article.dto';
 import { UpdateArticleDTO } from './dto/update-article.dto';
 
 class ArticleService {
+  private data: IArticle[];
+
+  constructor() {
+    this.data = fileHandler.getData() as unknown as IArticle[];
+  }
+
   public async getArticleByID(id: number): Promise<IArticle> {
-    return data.filter((article) => article.id === id)[0] as unknown as IArticle;
+    return this.data.filter((article) => article.id === id)[0] as unknown as IArticle;
   }
 
   public async getLastArticleID(): Promise<number> {
-    return data.sort((a, b) => b.id - a.id)[0].id;
+    return this.data.sort((a, b) => b.id - a.id)[0].id;
   }
 
   public async getAllArticles(): Promise<IArticle[]> {
-    return data as unknown as IArticle[];
+    return this.data;
   }
 
   public async getFilteredArticles(filters: IQueryFilters): Promise<IArticle[]> {
-    let articles = data;
+    let articles = this.data;
 
     if (filters.title) {
       articles = articles.filter((article) => article.title.toLowerCase().includes(filters.title!.toLowerCase()));
@@ -50,8 +54,7 @@ class ArticleService {
       ...article,
     };
 
-    data.push(newArticle);
-    fs.writeFileSync(path.join(__dirname, `../../data/database.json`), JSON.stringify(data));
+    fileHandler.setData(newArticle);
 
     return newArticle;
   }
@@ -63,13 +66,12 @@ class ArticleService {
       throw new Error(`Article not found`);
     }
 
-    const toRemoveIndex = data.findIndex((item) => item.id === id);
+    Object.assign(article, {
+      intro: updateData.intro,
+      title: updateData.title,
+    });
 
-    data.splice(toRemoveIndex, 1);
-    Object.assign(article, updateData);
-    data.push(article);
-
-    fs.writeFileSync(path.join(__dirname, `../../data/database.json`), JSON.stringify(data));
+    fileHandler.updateData(id, article);
 
     return article;
   }
